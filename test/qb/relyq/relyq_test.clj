@@ -1,11 +1,15 @@
-(ns qb.relyq.core-test
+(ns qb.relyq.relyq-test
   (:require [midje.sweet :refer :all]
-            [qb.relyq.core :as relyq]
+            [qb.relyq.relyq :as relyq]
             [qb.relyq.simpleq-test :refer (cfg timeit less-than greater-than) :rename {cfg redis-cfg}]
             [qb.relyq.simpleq :as simpleq]
             [clojure.edn :as edn]))
 
-(def do-timeout-tests (atom true))
+(def do-timeout-tests (atom false))
+
+(defn clear-relyq [{{:keys [todo doing failed]} :qs}]
+  (simpleq/clear redis-cfg todo doing failed))
+(def is-uuid #"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 
 (defn make-tests
   [{:keys [name config cleanup get-list idcheck]}]
@@ -52,11 +56,9 @@
 (make-tests
   {:name "simpleq/redis/json (default config)"
    :config {:redis redis-cfg
-            :prefix "test:relyq:simpleqredisjson"
-            :fmt :json}
-   :idcheck #"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-   :cleanup (fn [{{:keys [todo doing failed]} :qs}]
-              (simpleq/clear redis-cfg todo doing failed))
+            :prefix "test:relyq:simpleqredisjson"}
+   :idcheck is-uuid
+   :cleanup clear-relyq
    :get-list (fn [{:keys [ts qs]} k]
               (->> (k qs)
                    (simpleq/list redis-cfg)
@@ -69,8 +71,7 @@
             :ts-pref :ref
             :fmt :edn}
    :idcheck anything
-   :cleanup (fn [{{:keys [todo doing failed]} :qs}]
-              (simpleq/clear redis-cfg todo doing failed))
+   :cleanup clear-relyq
    :get-list (fn [{:keys [ts qs]} k]
               (->> (k qs)
                    (simpleq/list redis-cfg)

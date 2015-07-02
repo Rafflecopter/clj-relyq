@@ -13,7 +13,7 @@
   (chatty-checker [t] (> t n)))
 
 ;; only do timeout tests when this file is freshly loaded
-(def do-timeout-tests (atom true))
+(def do-timeout-tests (atom false))
 
 (facts "about push and pop"
   (let [k "test:simpleq:pushpop"]
