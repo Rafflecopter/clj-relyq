@@ -48,7 +48,7 @@ A reliable message queue that uses redis as its storage. A compatible clojure im
 
 ### Raw Usage
 
-```
+```clojure
 (ns your-namespace-here
   (:require [qb.relyq.relyq :as relyq]))
 
@@ -69,6 +69,7 @@ A reliable message queue that uses redis as its storage. A compatible clojure im
 Relyq is made up of two parts, a `QueueStore` and a `TaskStore`. Each has its own options:
 
 `QueueStore` options
+
     - `:qs-pref` Preference on store
     - for any `:qs-pref`, `QSSimpleq` is used. This store uses multiple simple redis queues (see [simpleq.clj](https://github.com/Rafflecopter/relyq/blob/master/src/clj/qb/relyq/simpleq.clj)) to move tasks around without losing them (using atomic operations).
         + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
@@ -76,6 +77,7 @@ Relyq is made up of two parts, a `QueueStore` and a `TaskStore`. Each has its ow
         + `:btimeout` Timeout (in seconds) of blocking process. Defaults to 1 second.
 
 `TaskStore` options
+
     - `:ts-pref` Preference on store
     - if `:ts-pref => :redis` or `nil`, `TSRedis` is used. This store puts encoded tasks in redis keys via `set` and `get`. It references them with ID's put in an `id-field`
         + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
