@@ -24,12 +24,12 @@
       (take! (qb/send! q dest {:foo "bar1"})) => nil
       (take! (qb/send! q dest {:foo "bar2"})) => nil)
     (fact "receive message from listener"
-      (let [rec (take! data)]
+      (let [rec (<!! data)]
         rec => (contains {:result some? :msg (contains {:foo "bar1" :id is-uuid})})
         (fact "pass success back"
           (util/success (:result rec)))))
     (fact "receive 2nd message from listener"
-      (let [rec (take! data)]
+      (let [rec (<!! data)]
         rec => (contains {:result some? :msg (contains {:foo "bar2" :id is-uuid})})
         (fact "pass error back"
           (util/error (:result rec) "testerror"))))
