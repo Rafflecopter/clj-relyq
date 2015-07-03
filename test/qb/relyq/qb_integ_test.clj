@@ -38,7 +38,6 @@
     (fact "stop should close data chan"
       (close! stop)
       (when @do-timeout-tests
-        (<!! (async/timeout 2000))
-        (take! data) => nil
+        (<!! data) => nil
         (reset! do-timeout-tests false)))
     (clear-relyq (:cfg q))))
