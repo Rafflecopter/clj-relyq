@@ -70,23 +70,23 @@ Relyq is made up of two parts, a `QueueStore` and a `TaskStore`. Each has its ow
 
 `QueueStore` options
 
-    - `:qs-pref` Preference on store
-    - for any `:qs-pref`, `QSSimpleq` is used. This store uses multiple simple redis queues (see [simpleq.clj](https://github.com/Rafflecopter/relyq/blob/master/src/clj/qb/relyq/simpleq.clj)) to move tasks around without losing them (using atomic operations).
-        + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
-        + `:prefix` Required string prefix for the key in redis. (Delimeted by `:`)
-        + `:btimeout` Timeout (in seconds) of blocking process. Defaults to 1 second.
+- `:qs-pref` Preference on store
+- for any `:qs-pref`, `QSSimpleq` is used. This store uses multiple simple redis queues (see [simpleq.clj](https://github.com/Rafflecopter/relyq/blob/master/src/clj/qb/relyq/simpleq.clj)) to move tasks around without losing them (using atomic operations).
+    + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
+    + `:prefix` Required string prefix for the key in redis. (Delimeted by `:`)
+    + `:btimeout` Timeout (in seconds) of blocking process. Defaults to 1 second.
 
 `TaskStore` options
 
-    - `:ts-pref` Preference on store
-    - if `:ts-pref => :redis` or `nil`, `TSRedis` is used. This store puts encoded tasks in redis keys via `set` and `get`. It references them with ID's put in an `id-field`
-        + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
-        + `:fmt` Format for encoding task (`:json` or `:edn`, `:json` default)
-        + `:prefix` Prefix for the key in redis. (Delimeted by `:`)
-        + `:id-field` Field to attach an ID on. (Default to `:id`)
-        + `:make-id` Function of no arguments to make an ID. Or it can be `:uuid` for UUID v4. (Defaults to `:uuid`)
-    - if `:ts-pref => :ref`, `TSRef` is used. This store encodes the whole task into the `QueueStore`.
-        + `:fmt` Format for encoding task (`:json` or `:edn`, `:json` default)
+- `:ts-pref` Preference on store
+- if `:ts-pref => :redis` or `nil`, `TSRedis` is used. This store puts encoded tasks in redis keys via `set` and `get`. It references them with ID's put in an `id-field`
+    + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
+    + `:fmt` Format for encoding task (`:json` or `:edn`, `:json` default)
+    + `:prefix` Prefix for the key in redis. (Delimeted by `:`)
+    + `:id-field` Field to attach an ID on. (Default to `:id`)
+    + `:make-id` Function of no arguments to make an ID. Or it can be `:uuid` for UUID v4. (Defaults to `:uuid`)
+- if `:ts-pref => :ref`, `TSRef` is used. This store encodes the whole task into the `QueueStore`.
+    + `:fmt` Format for encoding task (`:json` or `:edn`, `:json` default)
 
 ## License
 
