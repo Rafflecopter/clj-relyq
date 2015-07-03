@@ -1,8 +1,11 @@
-(defproject com.rafflecopter/relyq "0.1.0-SNAPSHOT"
+(defproject com.rafflecopter/relyq "0.1.0"
   :description "Implementation of relyq, a reliable redis-based queue"
   :url "http://github.com/Rafflecopter/clj-relyq"
   :license {:name "MIT"
             :url "http://github.com/Rafflecopter/clj-relyq/blob/master/LICENSE"}
+  :scm {:name "git"
+        :url "https://github.com/Rafflecopter/clj-relyq"}
+  :deploy-repositories [["clojars" {:creds :gpg}]]
 
   :resource-paths ["src/lua"]
   :source-paths ["src/clj"]
