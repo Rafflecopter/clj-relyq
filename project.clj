@@ -1,4 +1,4 @@
-(defproject com.rafflecopter/relyq "0.1.0"
+(defproject com.rafflecopter/relyq "0.1.1"
   :description "Implementation of relyq, a reliable redis-based queue"
   :url "http://github.com/Rafflecopter/clj-relyq"
   :license {:name "MIT"
@@ -14,6 +14,6 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [com.taoensso/carmine "2.11.1"]
                  [org.clojure/data.json "0.2.6"]
-                 [com.rafflecopter/qb "0.1.0"]]
+                 [com.rafflecopter/qb "0.1.1"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]
                    :plugins [[lein-midje "3.1.3"]]}})
