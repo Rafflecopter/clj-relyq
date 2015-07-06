@@ -73,7 +73,7 @@ Relyq is made up of two parts, a `QueueStore` and a `TaskStore`. Each has its ow
 - `:qs-pref` Preference on store
 - for any `:qs-pref`, `QSSimpleq` is used. This store uses multiple simple redis queues (see [simpleq.clj](https://github.com/Rafflecopter/relyq/blob/master/src/clj/qb/relyq/simpleq.clj)) to move tasks around without losing them (using atomic operations).
     + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
-    + `:prefix` Required string prefix for the key in redis. (Delimeted by `:`)
+    + `:prefix` Required string prefix for the key in redis. (Delimeted by `:`). Only available if using relyq straigh, when using qb, just use destination and source arguments in `send!` and `listen`
     + `:btimeout` Timeout (in seconds) of blocking process. Defaults to 1 second.
 
 `TaskStore` options
