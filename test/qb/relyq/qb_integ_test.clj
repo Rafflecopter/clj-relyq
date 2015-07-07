@@ -2,7 +2,7 @@
   (:require [midje.sweet :refer :all]
             [qb.relyq.core]
             [qb.core :as qb]
-            [qb.util :as util]
+            [qb.util :refer (ack-chan ack-success nack-error)]
             [qb.relyq.simpleq-test :refer (cfg timeit less-than greater-than) :rename {cfg redis-cfg}]
             [qb.relyq.relyq-test :refer (clear-relyq is-uuid)]
             [clojure.core.async :as async :refer (close! <!!)]))
@@ -25,14 +25,14 @@
       (take! (qb/send! q dest {:foo "bar2"})) => nil)
     (fact "receive message from listener"
       (let [rec (<!! data)]
-        rec => (contains {:result some? :msg (contains {:foo "bar1" :id is-uuid})})
+        rec => (contains {:ack some? :msg (contains {:foo "bar1" :id is-uuid})})
         (fact "pass success back"
-          (util/success (:result rec)))))
+          (ack-success (:ack rec)))))
     (fact "receive 2nd message from listener"
       (let [rec (<!! data)]
-        rec => (contains {:result some? :msg (contains {:foo "bar2" :id is-uuid})})
+        rec => (contains {:ack some? :msg (contains {:foo "bar2" :id is-uuid})})
         (fact "pass error back"
-          (util/error (:result rec) "testerror"))))
+          (nack-error (:ack rec) "testerror"))))
     (fact "nothing received from listener"
       (take! data) => :na)
     (fact "stop should close data chan"

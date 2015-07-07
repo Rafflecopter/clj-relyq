@@ -13,7 +13,7 @@ A reliable message queue that uses redis as its storage. A compatible clojure im
 ```clojure
 (ns your-namespace-here
   (:require [qb.core :as qb]
-            [qb.util :as qbutil]
+            [qb.util :refer (ack-success nack-error)]
             qb.relyq.core
             [clojure.core.async :refer (go-loop <! close!)]))
 
@@ -29,15 +29,15 @@ A reliable message queue that uses redis as its storage. A compatible clojure im
 ;; Sources are relyq prefixes
 (let [{:keys [data stop]} (qb/listen q "qb:me:name"))]
 
-  ;; data is a channel of {:result result-chan :msg msg}
+  ;; data is a channel of {:ack ack-chan :msg msg}
   (go-loop []
-    (let [{:keys [result msg]} (<! data)]
+    (let [{:keys [ack msg]} (<! data)]
       (try (handle-msg msg)
            ;; Notify the queue of successful processing
-           (qbutil/success result)
+           (ack-success ack)
         (catch Exception e
           ;; Notify the queue of an error in processing
-          (qbutil/error result (.getMessage e))))
+          (nack-error ack (.getMessage e))))
     (recur))
 
   ;; At some point, you can stop the listener by closing the stop channel
