@@ -1,4 +1,4 @@
-(defproject com.rafflecopter/relyq "0.2.1-SNAPSHOT"
+(defproject com.rafflecopter/relyq "0.2.1"
   :description "Implementation of relyq, a reliable redis-based queue"
   :url "http://github.com/Rafflecopter/clj-relyq"
   :license {:name "MIT"
