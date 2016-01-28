@@ -8,6 +8,18 @@ A reliable message queue that uses redis as its storage. A compatible clojure im
 
 ## Usage
 
+### Barebones Getting Started Config
+
+Here's a barebones config to get you going.
+
+```clojure
+{:type :relyq
+ :redis {:pool {}
+         :spec {:host Str
+                :port Int}}
+ :prefix Str}
+```
+
 ### Usage with QB
 
 ```clojure
@@ -66,27 +78,15 @@ A reliable message queue that uses redis as its storage. A compatible clojure im
 
 ## Configuration Options
 
-Relyq is made up of two parts, a `QueueStore` and a `TaskStore`. Each has its own options:
-
-`QueueStore` options
-
-- `:qs-pref` Preference on store
-- for any `:qs-pref`, `QSSimpleq` is used. This store uses multiple simple redis queues (see [simpleq.clj](https://github.com/Rafflecopter/relyq/blob/master/src/clj/qb/relyq/simpleq.clj)) to move tasks around without losing them (using atomic operations).
-    + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
-    + `:prefix` Required string prefix for the key in redis. (Delimeted by `:`). Only available if using relyq straigh, when using qb, just use destination and source arguments in `send!` and `listen`
-    + `:btimeout` Timeout (in seconds) of blocking process. Defaults to 1 second.
-
-`TaskStore` options
-
-- `:ts-pref` Preference on store
-- if `:ts-pref => :redis` or `nil`, `TSRedis` is used. This store puts encoded tasks in redis keys via `set` and `get`. It references them with ID's put in an `id-field`
-    + `:redis` Redis config (see [wcar docstring](https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29))
-    + `:fmt` Format for encoding task (`:json` or `:edn`, `:json` default)
-    + `:prefix` Prefix for the key in redis. (Delimeted by `:`)
-    + `:id-field` Field to attach an ID on. (Default to `:id`)
-    + `:make-id` Function of no arguments to make an ID. Or it can be `:uuid` for UUID v4. (Defaults to `:uuid`)
-- if `:ts-pref => :ref`, `TSRef` is used. This store encodes the whole task into the `QueueStore`.
-    + `:fmt` Format for encoding task (`:json` or `:edn`, `:json` default)
+|key        | Type    | Desc                               |
+|---        |---      |:---                                |
+|:type      |Keyword  |The only available type is `:relyq`|
+|:prefix    |Str      |Listen to redis key {prefix}{delim}todo. This is only used when using relyq directly (no qb).|
+|:redis     |Map      |See [wcar docstring][3]|
+|:btimeout  |Int      |Timeout (seconds) of blocking redis process (Defaults to 1)|
+|:fmt       |Keyword  |Format for encoding task (`:json` or `:edn`, `:json` by defaut)|
+|:id-field  |Keyword  |Field where task id can be found (Default: `:id`)|
+|:make-id   |Function |Creates a random id for the task (Defaults to uuid)|
 
 ## License
 
@@ -95,3 +95,4 @@ See [LICENSE](https://github.com/Rafflecopter/clj-relyq/blob/master/LICENSE) fil
 
 [1]: https://travis-ci.org/Rafflecopter/clj-relyq.png?branch=master
 [2]: http://travis-ci.org/Rafflecopter/clj-relyq
+[3]: https://github.com/ptaoussanis/carmine/blob/master/src/taoensso/carmine.clj#L29
