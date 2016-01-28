@@ -81,7 +81,7 @@ Here's a barebones config to get you going.
 |key        | Type    | Desc                               |
 |---        |---      |:---                                |
 |:type      |Keyword  |The only available type is `:relyq`|
-|:prefix    |Str      |Listen to redis key {prefix}{delim}todo. This is only used when using relyq directly (no qb).|
+|:prefix    |Str      |This is only used when using relyq directly (no qb). QB uses `source` or `destination` as the prefix. The prefix is the added to all redis keys used by relyq. The default is "relyq".|
 |:redis     |Map      |See [wcar docstring][3]|
 |:btimeout  |Int      |Timeout (seconds) of blocking redis process (Defaults to 1)|
 |:fmt       |Keyword  |Format for encoding task (`:json` or `:edn`, `:json` by defaut)|
